@@ -1,50 +1,40 @@
 package com.example.demo.Beans;
 
+import com.example.demo.Enums.Category;
+
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
+
 @Entity
-@Table(name = "coupons")
+@Table (name = "Coupons")
 public class Coupon {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int id, companyId;
-    private Category category;
-    private String title, description;
-    private Date startDate, endDate;
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private int id;
+    private int companyId;
     private int amount;
+    private Category category;
+    private String title, description, image;
+    private Date startDate, endDate;
     private double price;
-    private String image;
+    @ManyToMany (mappedBy = "coupons", fetch = FetchType.LAZY)
+    private List<Customer> customers;
 
-
-    //cons to select from db
-    public Coupon(int id, int companyId, Category category, String title, String description, Date startDate,
-                  Date endDate, int amount, double price, String image) {
-        this.id = id;
-        this.companyId = companyId;
-        this.category = category;
-        this.title = title;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.amount = amount;
-        this.price = price;
-        this.image = image;
+    public Coupon() {
     }
 
-    //cons to insert into db
-    public Coupon(int companyId, Category category, String title, String description, Date startDate,
-                  Date endDate, int amount, double price, String image) {
+    public Coupon(int companyId, int amount, Category category, String title, Date startDate, Date endDate, double price) {
         this.companyId = companyId;
+        this.amount = amount;
         this.category = category;
         this.title = title;
-        this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.amount = amount;
         this.price = price;
-        this.image = image;
     }
 
+    //GETTERS
     public int getId() {
         return id;
     }
@@ -53,70 +43,74 @@ public class Coupon {
         return companyId;
     }
 
-    public Category getCategory() {
-        return category;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public Category getCategory() {
+        return category;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public String getImage() {
         return image;
     }
 
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    //SETTERS
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void setImage(String image) {
         this.image = image;
     }
 
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
     @Override
     public String toString() {
         return "Coupon's id: " + id +
