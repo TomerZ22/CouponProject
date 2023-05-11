@@ -16,13 +16,18 @@ import java.util.List;
     public class AdminService extends ClientService {
 
         public AdminService() {
+
         }
 
         @Override
         public int login(String email, String password){
-            if(email.equals("admin@admin.com") && password.equals("admin"))
+            if(email.equals("admin@admin.com") && password.equals("admin")) {
+                System.out.println("Logged In");
                 return 1;
-            else return -1;
+            }
+            else
+                System.out.println("Wrong Information For The Log In Buddy");
+                return -1;
         }
         //CREATE
 
@@ -33,8 +38,9 @@ import java.util.List;
         public Company addCompany (Company company) throws CompanyExistsException {
             if (companyRepo.existsByName(company.getName()) || companyRepo.existsByEmail(company.getEmail()))
                 throw new CompanyExistsException("Sorry, name or email already taken");
-            Company newCompany = companyRepo.save(company);
-            return newCompany;
+             companyRepo.save(company);
+            System.out.println("Company Added Successfully");
+            return company;
         }
 
         /**check if there's already a customer with this email, if not add this to the database
@@ -44,6 +50,7 @@ import java.util.List;
         public Customer addCustomer(Customer customer) throws CustomerExistsException {
             if(customerRepo.existsByEmail(customer.getEmail()))
                 throw new CustomerExistsException("Sorry, email already taken");
+            System.out.println("Customer Added Successfully");
             return customerRepo.save(customer);
         }
 
@@ -99,7 +106,7 @@ import java.util.List;
         public Company updateCompany(Company company) throws NotFoundException {
             if(companyRepo.existsById(company.getId())) {
                 companyRepo.save(company);
-                System.out.println("Company no' " + company.getId() + " was updated");
+                System.out.println("Company No:' " + company.getId() + " was updated");
                 return companyRepo.findById(company.getId()).get();
             }
             else throw new NotFoundException("Company not found");

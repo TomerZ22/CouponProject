@@ -7,6 +7,7 @@ import com.example.demo.Exceptions.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -34,9 +35,12 @@ public class CustomerService extends ClientService{
         Optional<Customer> customer = customerRepo.findByEmailAndPassword(email, password);
         if (customer.isPresent()) {
             customerID = customer.get().getId();
+            System.out.println("Logged In");
             return customerID;
         }
-        else return -1;
+        else
+        System.out.println("Wrong Information For The Log In Buddy");
+         return -1;
     }
 
     //CREATE
@@ -50,6 +54,7 @@ public class CustomerService extends ClientService{
      * @throws CouponAlreadyBoughtException can't purchase the same coupon twice
      * @throws NotFoundException can't find customer
      */
+    @Transactional
     public void purchaseCoupon(Coupon coupon) throws CouponExpiresException, CouponNotInStockException,
             CouponAlreadyBoughtException, NotFoundException {
         if(Calendar.getInstance().getTime().after(coupon.getEndDate()))
@@ -60,16 +65,15 @@ public class CustomerService extends ClientService{
             throw new CouponAlreadyBoughtException();
         //get an object of the current customer and its coupons
         Customer customer = customerRepo.findById(customerID).orElseThrow( () -> new NotFoundException("Customer not found"));
-        List<Coupon> customerCoupons = getCustomerCoupons();
+        List<Coupon> customerCoupons = customer.getCoupons();
         //add the coupon to the new coupon collection
         customerCoupons.add(coupon);
         //save the customer with the new collection to the database
         customer.setCoupons(customerCoupons);
+        coupon.setAmount(coupon.getAmount()-1);
         customerRepo.save(customer);
         //update coupon amount
-        coupon.setAmount(coupon.getAmount()-1);
         //save coupon with updated amount to the database
-        couponRepo.save(coupon);
         System.out.println("Customer " + customer.getFirstName() + " " + customer.getLastName() + " purchased " +
                 coupon.getTitle() + " coupon");
     }

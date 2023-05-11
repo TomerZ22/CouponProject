@@ -1,6 +1,7 @@
 package com.example.demo.Beans;
 
 import jdk.jfr.Enabled;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.util.List;

@@ -14,5 +14,9 @@ public abstract class ClientService {
     @Autowired
     protected CouponRepository couponRepo;
 
+    public ClientService() {
+
+    }
+
     public abstract int login(String email, String password) throws IncorrectCredentialsException;
 }

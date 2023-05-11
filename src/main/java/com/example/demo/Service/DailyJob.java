@@ -1,4 +1,4 @@
-package com.example.demo.Thread;
+package com.example.demo.Service;
 
 import com.example.demo.Beans.Coupon;
 import com.example.demo.Repository.CouponRepository;
@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+
 @Service
-public class CouponExpirationDailyJob implements Runnable {
+public class DailyJob implements Runnable{
     @Autowired
     private CouponRepository couponRepo;
     public boolean quit = false;
